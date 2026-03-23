@@ -1,0 +1,56 @@
+import tkinter as tk
+
+# ====== XỬ LÝ TÊN ======
+def chuan_hoa_ten(ho_ten):
+    parts = ho_ten.strip().split()
+    
+    if len(parts) == 0:
+        return ""
+    
+    last_name = parts[-1]  # họ (đặt lên đầu)
+    first_names = parts[:-1]  # phần còn lại
+
+    initials = ""
+    for name in first_names:
+        initials += name[0].upper() + ". "
+
+    return f"{last_name}, {initials.strip()}"
+
+# ====== XỬ LÝ NÚT ======
+def xu_ly():
+    input_text = text_input.get("1.0", tk.END).strip()
+    lines = input_text.split("\n")
+
+    result = []
+
+    for line in lines:
+        if line.strip() != "":
+            result.append(chuan_hoa_ten(line))
+
+    # Sắp xếp theo họ (alphabet)
+    result.sort()
+
+    text_output.delete("1.0", tk.END)
+    for name in result:
+        text_output.insert(tk.END, name + "\n")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Chuẩn hoá tên - Niên giám điện thoại")
+root.geometry("500x400")
+
+# Input
+tk.Label(root, text="Nhập danh sách tên (mỗi dòng 1 tên):").pack()
+text_input = tk.Text(root, height=10, width=50)
+text_input.pack(pady=5)
+
+# Nút xử lý
+tk.Button(root, text="Chuẩn hoá & sắp xếp", command=xu_ly).pack(pady=10)
+
+# Output
+tk.Label(root, text="Kết quả:").pack()
+text_output = tk.Text(root, height=10, width=50)
+text_output.pack(pady=5)
+
+# Chạy
+root.mainloop()
