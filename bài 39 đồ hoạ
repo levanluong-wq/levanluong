@@ -1,0 +1,31 @@
+import tkinter as tk
+
+# ====== XỬ LÝ ======
+def tim_bo_ba():
+    text_output.delete("1.0", tk.END)
+
+    for a in range(1, 100):
+        for b in range(a+1, 100):
+            for c in range(b+1, 100):
+                if a*a + b*b == c*c:
+                    # 3 số nguyên liên tiếp
+                    if b == a+1 and c == b+1:
+                        text_output.insert(tk.END,
+                            f"({a}, {b}, {c}): ba so nguyen lien tiep\n")
+
+                    # 3 số chẵn liên tiếp
+                    elif a % 2 == 0 and b == a+2 and c == b+2:
+                        text_output.insert(tk.END,
+                            f"({a}, {b}, {c}): ba so chan lien tiep\n")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Bo ba Pythagorean < 100")
+root.geometry("450x300")
+
+tk.Button(root, text="Tim bo ba", command=tim_bo_ba).pack(pady=10)
+
+text_output = tk.Text(root, width=50, height=12)
+text_output.pack()
+
+root.mainloop()
