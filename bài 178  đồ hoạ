@@ -1,0 +1,62 @@
+import tkinter as tk
+from tkinter import filedialog
+
+# ====== ĐỌC FILE & ĐÁNH SỐ ======
+def doc_file():
+    file_path = filedialog.askopenfilename(
+        title="Chọn file nguồn",
+        filetypes=[("C files", "*.c"), ("Text files", "*.txt"), ("All files", "*.*")]
+    )
+    
+    if not file_path:
+        return
+    
+    text_output.delete("1.0", tk.END)
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            for i, line in enumerate(f):
+                text_output.insert(tk.END, f"{i}: {line}")
+    except:
+        text_output.insert(tk.END, "Không đọc được file!")
+
+# ====== LƯU FILE MỚI ======
+def luu_file():
+    content = text_output.get("1.0", tk.END)
+
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt")]
+    )
+
+    if not file_path:
+        return
+
+    try:
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        label_status.config(text="Đã lưu file thành công!")
+    except:
+        label_status.config(text="Lỗi khi lưu file!")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("LINES - Đánh số dòng file")
+root.geometry("600x400")
+
+# Nút chọn file
+tk.Button(root, text="Chọn file & hiển thị", command=doc_file).pack(pady=10)
+
+# Hiển thị nội dung
+text_output = tk.Text(root, width=70, height=15)
+text_output.pack(pady=5)
+
+# Nút lưu file mới
+tk.Button(root, text="Lưu file đã đánh số", command=luu_file).pack(pady=10)
+
+# Trạng thái
+label_status = tk.Label(root, text="")
+label_status.pack()
+
+# Chạy
+root.mainloop()
