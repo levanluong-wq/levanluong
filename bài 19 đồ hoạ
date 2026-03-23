@@ -1,0 +1,84 @@
+import tkinter as tk
+
+# ====== HÀM CHUYỂN ĐỔI ======
+def to_seconds(h, m, s):
+    return h*3600 + m*60 + s
+
+def from_seconds(t):
+    h = t // 3600
+    t %= 3600
+    m = t // 60
+    s = t % 60
+    return h, m, s
+
+# ====== XỬ LÝ ======
+def tinh_hieu():
+    try:
+        h1 = int(entry_h1.get())
+        m1 = int(entry_m1.get())
+        s1 = int(entry_s1.get())
+
+        h2 = int(entry_h2.get())
+        m2 = int(entry_m2.get())
+        s2 = int(entry_s2.get())
+
+        t1 = to_seconds(h1, m1, s1)
+        t2 = to_seconds(h2, m2, s2)
+
+        diff = abs(t2 - t1)
+
+        h, m, s = from_seconds(diff)
+
+        result_label.config(
+            text=f"Hiệu thời gian: {h} giờ {m} phút {s} giây"
+        )
+
+    except:
+        result_label.config(text="Vui lòng nhập số hợp lệ!")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Tính hiệu thời gian")
+root.geometry("400x300")
+
+# Thời điểm 1
+tk.Label(root, text="Thời điểm 1").pack()
+frame1 = tk.Frame(root)
+frame1.pack()
+
+entry_h1 = tk.Entry(frame1, width=5)
+entry_h1.pack(side=tk.LEFT)
+tk.Label(frame1, text=":").pack(side=tk.LEFT)
+
+entry_m1 = tk.Entry(frame1, width=5)
+entry_m1.pack(side=tk.LEFT)
+tk.Label(frame1, text=":").pack(side=tk.LEFT)
+
+entry_s1 = tk.Entry(frame1, width=5)
+entry_s1.pack(side=tk.LEFT)
+
+# Thời điểm 2
+tk.Label(root, text="Thời điểm 2").pack()
+frame2 = tk.Frame(root)
+frame2.pack()
+
+entry_h2 = tk.Entry(frame2, width=5)
+entry_h2.pack(side=tk.LEFT)
+tk.Label(frame2, text=":").pack(side=tk.LEFT)
+
+entry_m2 = tk.Entry(frame2, width=5)
+entry_m2.pack(side=tk.LEFT)
+tk.Label(frame2, text=":").pack(side=tk.LEFT)
+
+entry_s2 = tk.Entry(frame2, width=5)
+entry_s2.pack(side=tk.LEFT)
+
+# Nút tính
+tk.Button(root, text="Tính hiệu", command=tinh_hieu).pack(pady=10)
+
+# Kết quả
+result_label = tk.Label(root, text="")
+result_label.pack(pady=10)
+
+# Chạy
+root.mainloop()
