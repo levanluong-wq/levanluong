@@ -1,0 +1,76 @@
+import tkinter as tk
+import calendar
+
+# Đặt tuần bắt đầu từ Chủ nhật
+calendar.setfirstweekday(calendar.SUNDAY)
+
+# Tên tháng tiếng Việt (không dấu)
+thang_vn = [
+    "", "Thang Mot", "Thang Hai", "Thang Ba", "Thang Tu",
+    "Thang Nam", "Thang Sau", "Thang Bay", "Thang Tam",
+    "Thang Chin", "Thang Muoi", "Thang Muoi Mot", "Thang Muoi Hai"
+]
+
+# ====== XỬ LÝ ======
+def hien_lich():
+    try:
+        month = int(entry_month.get())
+        year = int(entry_year.get())
+
+        if month < 1 or month > 12 or year <= 1900:
+            label_title.config(text="Nhap thang (1-12), nam > 1900!")
+            return
+
+        # Lấy ma trận lịch
+        cal = calendar.monthcalendar(year, month)
+
+        text_output.delete("1.0", tk.END)
+
+        # Tiêu đề
+        label_title.config(text=f"{thang_vn[month]} {year}")
+        text_output.insert(tk.END, " CN Hai Ba Tu Nam Sau Bay\n")
+
+        # In tối đa 5 dòng
+        for i in range(min(5, len(cal))):
+            week = cal[i]
+            line = ""
+            for day in week:
+                if day == 0:
+                    line += "   "
+                else:
+                    line += f"{day:2} "
+            text_output.insert(tk.END, line + "\n")
+
+    except:
+        label_title.config(text="Nhap du lieu hop le!")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("In lich thang (Tieng Viet khong dau)")
+root.geometry("400x300")
+
+# Nhập
+frame_input = tk.Frame(root)
+frame_input.pack(pady=10)
+
+tk.Label(frame_input, text="Thang:").pack(side=tk.LEFT)
+entry_month = tk.Entry(frame_input, width=5)
+entry_month.pack(side=tk.LEFT, padx=5)
+
+tk.Label(frame_input, text="Nam:").pack(side=tk.LEFT)
+entry_year = tk.Entry(frame_input, width=8)
+entry_year.pack(side=tk.LEFT, padx=5)
+
+# Nút
+tk.Button(root, text="Hien lich", command=hien_lich).pack(pady=10)
+
+# Tiêu đề
+label_title = tk.Label(root, text="", font=("Arial", 12, "bold"))
+label_title.pack()
+
+# Output
+text_output = tk.Text(root, width=35, height=8)
+text_output.pack(pady=5)
+
+# Chạy
+root.mainloop()
