@@ -1,0 +1,81 @@
+import tkinter as tk
+import math
+
+# ====== CHỌN HÀM ======
+def get_function(name):
+    if name == "sin":
+        return math.sin
+    elif name == "cos":
+        return math.cos
+    elif name == "tan":
+        return math.tan
+    else:
+        return None
+
+# ====== XỬ LÝ ======
+def tinh_toan():
+    try:
+        func_name = func_var.get()
+        func = get_function(func_name)
+
+        a = float(entry_a.get())
+        b = float(entry_b.get())
+        step = float(entry_step.get())
+
+        if func is None or step <= 0:
+            label_status.config(text="Du lieu khong hop le!")
+            return
+
+        text_output.delete("1.0", tk.END)
+        text_output.insert(tk.END, "    x        f(x)\n")
+
+        x = a
+        while x <= b + 1e-9:  # tránh sai số float
+            y = func(x)
+            text_output.insert(tk.END, f"{x:8.4f} {y:8.4f}\n")
+            x += step
+
+        label_status.config(text="Hoan thanh!")
+
+    except:
+        label_status.config(text="Nhap sai du lieu!")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Bang gia tri ham luong giac")
+root.geometry("400x350")
+
+# Chọn hàm
+tk.Label(root, text="Chon ham:").pack()
+func_var = tk.StringVar(value="sin")
+tk.OptionMenu(root, func_var, "sin", "cos", "tan").pack()
+
+# Nhập khoảng
+frame = tk.Frame(root)
+frame.pack(pady=10)
+
+tk.Label(frame, text="a:").grid(row=0, column=0)
+entry_a = tk.Entry(frame, width=10)
+entry_a.grid(row=0, column=1)
+
+tk.Label(frame, text="b:").grid(row=1, column=0)
+entry_b = tk.Entry(frame, width=10)
+entry_b.grid(row=1, column=1)
+
+tk.Label(frame, text="step:").grid(row=2, column=0)
+entry_step = tk.Entry(frame, width=10)
+entry_step.grid(row=2, column=1)
+
+# Nút
+tk.Button(root, text="Tinh bang", command=tinh_toan).pack(pady=10)
+
+# Trạng thái
+label_status = tk.Label(root, text="")
+label_status.pack()
+
+# Output
+text_output = tk.Text(root, width=30, height=10)
+text_output.pack()
+
+# Chạy
+root.mainloop()
