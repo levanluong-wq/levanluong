@@ -1,0 +1,79 @@
+import tkinter as tk
+import random
+
+# Tạo ma trận 3x3 ngẫu nhiên
+def tao_ma_tran():
+    global A
+    A = [[random.randint(0, 9) for _ in range(3)] for _ in range(3)]
+    hien_thi_ma_tran(A, text_A)
+
+# Hiển thị ma trận lên giao diện
+def hien_thi_ma_tran(matrix, widget):
+    widget.delete("1.0", tk.END)
+    for row in matrix:
+        for val in row:
+            widget.insert(tk.END, f"{val:5}")
+        widget.insert(tk.END, "\n")
+
+# Nhân 2 ma trận
+def nhan_ma_tran(A, B):
+    C = [[0]*3 for _ in range(3)]
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                C[i][j] += A[i][k] * B[k][j]
+    return C
+
+# Tính lũy thừa ma trận
+def luy_thua():
+    try:
+        k = int(entry_k.get())
+        if k <= 1:
+            ket_qua_label.config(text="k phải > 1")
+            return
+
+        result = A
+        for _ in range(k-1):
+            result = nhan_ma_tran(result, A)
+
+        hien_thi_ma_tran(result, text_result)
+        ket_qua_label.config(text=f"Ma trận A^{k}")
+    except:
+        ket_qua_label.config(text="Nhập k hợp lệ!")
+
+# ====== Giao diện ======
+root = tk.Tk()
+root.title("Ma trận lũy thừa A^k")
+root.geometry("500x400")
+
+A = [[0]*3 for _ in range(3)]
+
+# Nút tạo ma trận
+btn_tao = tk.Button(root, text="Tạo ma trận A", command=tao_ma_tran)
+btn_tao.pack(pady=10)
+
+# Hiển thị ma trận A
+text_A = tk.Text(root, height=5, width=30)
+text_A.pack()
+
+# Nhập k
+frame_k = tk.Frame(root)
+frame_k.pack(pady=10)
+
+tk.Label(frame_k, text="Nhập k > 1: ").pack(side=tk.LEFT)
+entry_k = tk.Entry(frame_k, width=10)
+entry_k.pack(side=tk.LEFT)
+
+# Nút tính
+btn_tinh = tk.Button(root, text="Tính A^k", command=luy_thua)
+btn_tinh.pack(pady=10)
+
+# Hiển thị kết quả
+ket_qua_label = tk.Label(root, text="")
+ket_qua_label.pack()
+
+text_result = tk.Text(root, height=5, width=30)
+text_result.pack()
+
+# Chạy chương trình
+root.mainloop()
