@@ -1,0 +1,85 @@
+import tkinter as tk
+
+# ====== NODE ======
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+# ====== TẠO LIST ======
+def tao_list(arr):
+    head = None
+    tail = None
+    for x in arr:
+        if x == 0:
+            break
+        node = Node(x)
+        if head is None:
+            head = tail = node
+        else:
+            tail.next = node
+            tail = node
+    return head
+
+# ====== IN LIST ======
+def list_to_string(head):
+    result = ""
+    cur = head
+    while cur:
+        result += f"[{cur.data}]"
+        cur = cur.next
+    return result if result else "[]"
+
+# ====== XÓA NODE ======
+def xoa_node(head, x):
+    # Xóa các node đầu
+    while head and head.data == x:
+        head = head.next
+
+    cur = head
+    while cur and cur.next:
+        if cur.next.data == x:
+            cur.next = cur.next.next
+        else:
+            cur = cur.next
+
+    return head
+
+# ====== XỬ LÝ ======
+def xu_ly():
+    try:
+        arr = list(map(int, entry_input.get().split()))
+        x = int(entry_delete.get())
+
+        head = tao_list(arr)
+
+        text_output.delete("1.0", tk.END)
+
+        text_output.insert(tk.END, "List goc: " + list_to_string(head) + "\n")
+
+        head = xoa_node(head, x)
+
+        text_output.insert(tk.END, "List moi: " + list_to_string(head))
+
+    except:
+        text_output.insert(tk.END, "Nhap sai du lieu!")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Xoa node trong danh sach lien ket")
+root.geometry("500x300")
+
+tk.Label(root, text="Nhap day so (ket thuc bang 0):").pack(pady=5)
+entry_input = tk.Entry(root, width=50)
+entry_input.pack(pady=5)
+
+tk.Label(root, text="Nhap gia tri can xoa:").pack()
+entry_delete = tk.Entry(root, width=20)
+entry_delete.pack(pady=5)
+
+tk.Button(root, text="Xu ly", command=xu_ly).pack(pady=10)
+
+text_output = tk.Text(root, width=60, height=10)
+text_output.pack(pady=5)
+
+root.mainloop()
