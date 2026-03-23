@@ -1,0 +1,86 @@
+import tkinter as tk
+
+# ====== HÀM NÉN ======
+def nen_rle(s):
+    if not s:
+        return ""
+
+    result = ""
+    count = 1
+
+    for i in range(1, len(s)):
+        if s[i] == s[i-1]:
+            count += 1
+        else:
+            if count > 1:
+                result += str(count)
+            result += s[i-1]
+            count = 1
+
+    # xử lý phần cuối
+    if count > 1:
+        result += str(count)
+    result += s[-1]
+
+    return result
+
+
+# ====== HÀM GIẢI NÉN ======
+def giai_nen_rle(s):
+    result = ""
+    num = ""
+
+    for ch in s:
+        if ch.isdigit():
+            num += ch
+        else:
+            if num == "":
+                result += ch
+            else:
+                result += ch * int(num)
+                num = ""
+
+    return result
+
+
+# ====== XỬ LÝ NÚT ======
+def xu_ly_nen():
+    s = entry_input.get()
+    ket_qua = nen_rle(s)
+    entry_output.delete(0, tk.END)
+    entry_output.insert(0, ket_qua)
+
+def xu_ly_giai_nen():
+    s = entry_input.get()
+    ket_qua = giai_nen_rle(s)
+    entry_output.delete(0, tk.END)
+    entry_output.insert(0, ket_qua)
+
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Nén & Giải nén Run-Length")
+root.geometry("500x300")
+
+# Nhập chuỗi
+tk.Label(root, text="Chuỗi đầu vào:").pack(pady=5)
+entry_input = tk.Entry(root, width=50)
+entry_input.pack(pady=5)
+
+# Nút chức năng
+frame_btn = tk.Frame(root)
+frame_btn.pack(pady=10)
+
+btn_nen = tk.Button(frame_btn, text="Nén", width=10, command=xu_ly_nen)
+btn_nen.pack(side=tk.LEFT, padx=10)
+
+btn_giai = tk.Button(frame_btn, text="Giải nén", width=10, command=xu_ly_giai_nen)
+btn_giai.pack(side=tk.LEFT, padx=10)
+
+# Kết quả
+tk.Label(root, text="Kết quả:").pack(pady=5)
+entry_output = tk.Entry(root, width=50)
+entry_output.pack(pady=5)
+
+# Chạy
+root.mainloop()
