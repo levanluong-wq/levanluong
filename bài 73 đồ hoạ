@@ -1,0 +1,47 @@
+import tkinter as tk
+
+# ====== XỬ LÝ ======
+def xu_ly():
+    try:
+        n = int(entry_n.get())
+        arr = list(map(int, entry_arr.get().split()))
+
+        if n < 1 or n > 99 or len(arr) != n:
+            label_result.config(text="Nhap sai du lieu!")
+            return
+
+        unique = []
+        for x in arr:
+            if x not in unique:
+                unique.append(x)
+
+        result = " ".join(map(str, unique))
+        label_result.config(text=f"Phan tu phan biet: {result}")
+
+    except:
+        label_result.config(text="Nhap sai du lieu!")
+
+# ====== GIAO DIỆN ======
+root = tk.Tk()
+root.title("Mang - Phan tu phan biet")
+root.geometry("400x250")
+
+# Nhập n
+tk.Label(root, text="Nhap n [1, 99]:").pack(pady=5)
+entry_n = tk.Entry(root)
+entry_n.pack(pady=5)
+
+# Nhập mảng
+tk.Label(root, text="Nhap cac phan tu (cach nhau boi space):").pack()
+entry_arr = tk.Entry(root, width=40)
+entry_arr.pack(pady=5)
+
+# Nút xử lý
+tk.Button(root, text="Xu ly", command=xu_ly).pack(pady=10)
+
+# Kết quả
+label_result = tk.Label(root, text="", fg="blue")
+label_result.pack(pady=10)
+
+# Chạy
+root.mainloop()
